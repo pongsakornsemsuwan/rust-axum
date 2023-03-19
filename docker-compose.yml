@@ -1,23 +1,32 @@
 # NOTE: THIS IS FOR DEVELOPMENT USE (LOCAL) ONLY
 version: "3.9"
 services:
-  database: 
+  database-shard-1: 
     image: postgres:latest
     volumes:
-      - ~./db-data:/var/lib/postgresql/data
+      - ~./db-data-1:/var/lib/postgresql/data
     environment:
       - POSTGRES_PASSWORD=postgres
     ports:
       - 5432:5432
+  database-shard-2: 
+    image: postgres:latest
+    volumes:
+      - ~./db-data-2:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_PASSWORD=postgres
+    ports:
+      - 5433:5433
+    command: -p 5433
   # RUNNING cargo-watch IN DOCKER TAKES LONGER TO COMPILE (~1-2 SEC)
   # WHEREAS IF YOU RUN cargo-watch LOCALLํํY, COMPILE TIME IS <1 SEC
   # MY PREFERENCE IS TO "docker-compose up database" and run "cargo-watch -x run" locally
-  app:
-      build: .
-      container_name: "rust-axum"
-      volumes:
-          # - .:/app
-          - ./src:/app/src
-      command: sh -c "cargo watch -x run"
-      ports:
-          - 3000:3000
+  # app:
+  #     build: .
+  #     container_name: "rust-axum"
+  #     volumes:
+  #         # - .:/app
+  #         - ./src:/app/src
+  #     command: sh -c "cargo watch -x run"
+  #     ports:
+  #         - 3000:3000

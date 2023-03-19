@@ -1,9 +1,7 @@
-use std::time::SystemTime;
-
 use serde::{Deserialize, Serialize};
 
-#[derive(Serialize, Deserialize)]
+#[derive(Serialize, Deserialize, sqlx::FromRow, Debug)]
 pub struct Promotion {
   pub name: String,
-  pub created_at: SystemTime,
+  // pub created_at: sqlx::types::chrono::DateTime<chrono::Utc>,
 }
